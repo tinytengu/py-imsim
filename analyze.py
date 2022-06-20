@@ -4,30 +4,7 @@ import argparse
 from time import time
 
 from app.images import get_mse_ssim, get_similarity
-from app.utils import filter_results
-
-
-def get_files(path: str, deep: int = 0, deepnow: int = 0) -> list[str]:
-    for dirpath, dirnames, filenames in os.walk(path):
-        files = [os.path.join(dirpath, fn) for fn in filenames]
-
-        if deep == deepnow:
-            return files
-
-        return [
-            file
-            for file in (
-                files
-                + [
-                    files.extend(
-                        get_files(os.path.join(dirpath, dirname), deep, deepnow + 1)
-                    )
-                    for dirname in dirnames
-                ]
-            )
-            if file
-        ]
-    return files
+from app.utils import filter_results, get_files
 
 
 def analyze_files(files: list[str], verbose: bool = False) -> list[dict]:
